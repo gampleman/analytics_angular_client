@@ -1,6 +1,7 @@
 {
   "name": "AnalyticsAngularClient",
   "version": "1.0.0",
+  "main": "dist/client.js",
   "private": true,
   "dependencies": {
     "angular": "~1.3"
