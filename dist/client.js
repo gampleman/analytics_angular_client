@@ -6,6 +6,22 @@
  * Handles communication with the AnalyticsAngularClient API.
  */
 angular.module('AnalyticsAngularClient', []);
+angular.module('AnalyticsAngularClient').value('wrapPromise', function(promise, isArray) {
+  if (isArray) {
+    var temp = [];
+    temp.then = promise.then;
+    promise = temp;
+  }
+  promise.then(function(result) {
+    if (isArray) {
+      _.uniqBy(promise, result);
+    } else {
+      _.uniqBy(promise, result);
+    }
+    return result;
+  });
+  return promise;
+});
 
 
 /**
@@ -15,7 +31,7 @@ angular.module('AnalyticsAngularClient', []);
  * Handles communication with the AnalyticsAngularClient API.
  */
 angular.module('AnalyticsAngularClient').provider('Accounts', function() {
-  this.$get = function($http, AccountType) {
+  this.$get = function($http, wrapPromise, AccountType) {
     var api = {};
     /**
      * @ngdoc method
@@ -62,7 +78,7 @@ angular.module('AnalyticsAngularClient').provider('Accounts', function() {
       if (data.shard_id != null) {
         payload.shard_id = data.shard_id;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -72,7 +88,7 @@ angular.module('AnalyticsAngularClient').provider('Accounts', function() {
         if (response.code === 201) {
           return new AccountType(response.data);
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -105,16 +121,18 @@ angular.module('AnalyticsAngularClient').provider('Accounts', function() {
         params.view = data.view;
         delete data.view;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return new AccountType(response.data);
+          return _.uniqBy(response.data, function(el) {
+            return new AccountType(el);
+          });
         }
-      });
+      }), true);
     };
     /**
      * @ngdoc method
@@ -147,7 +165,7 @@ angular.module('AnalyticsAngularClient').provider('Accounts', function() {
         params.view = data.view;
         delete data.view;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -156,7 +174,7 @@ angular.module('AnalyticsAngularClient').provider('Accounts', function() {
         if (response.code === 200) {
           return new AccountType(response.data);
         }
-      });
+      }));
     };
     return api;
   };
@@ -169,7 +187,7 @@ angular.module('AnalyticsAngularClient').provider('Accounts', function() {
  * Handles communication with the AnalyticsAngularClient API.
  */
 angular.module('AnalyticsAngularClient').provider('AnalysisSnapshots', function() {
-  this.$get = function($http, AnalysisSnapshotType) {
+  this.$get = function($http, wrapPromise, AnalysisSnapshotType) {
     var api = {};
     /**
      * @ngdoc method
@@ -233,7 +251,7 @@ angular.module('AnalyticsAngularClient').provider('AnalysisSnapshots', function(
       if (data.module_states != null) {
         payload.module_states = data.module_states.encodeJSON ? data.module_states.encodeJSON() : data.module_states;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -243,7 +261,7 @@ angular.module('AnalyticsAngularClient').provider('AnalysisSnapshots', function(
         if (response.code === 201) {
           return new AnalysisSnapshotType(response.data);
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -276,7 +294,7 @@ angular.module('AnalyticsAngularClient').provider('AnalysisSnapshots', function(
         params.view = data.view;
         delete data.view;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -285,7 +303,7 @@ angular.module('AnalyticsAngularClient').provider('AnalysisSnapshots', function(
         if (response.code === 200) {
           return new AnalysisSnapshotType(response.data);
         }
-      });
+      }));
     };
     return api;
   };
@@ -298,7 +316,7 @@ angular.module('AnalyticsAngularClient').provider('AnalysisSnapshots', function(
  * Handles communication with the AnalyticsAngularClient API.
  */
 angular.module('AnalyticsAngularClient').provider('BudgetAlerts', function() {
-  this.$get = function($http, BudgetAlertType) {
+  this.$get = function($http, wrapPromise, BudgetAlertType) {
     var api = {};
     /**
      * @ngdoc method
@@ -361,7 +379,7 @@ angular.module('AnalyticsAngularClient').provider('BudgetAlerts', function() {
       if (data.filters != null) {
         payload.filters = data.filters.encodeJSON ? data.filters.encodeJSON() : data.filters;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -371,7 +389,7 @@ angular.module('AnalyticsAngularClient').provider('BudgetAlerts', function() {
         if (response.code === 201) {
           return new BudgetAlertType(response.data);
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -404,16 +422,18 @@ angular.module('AnalyticsAngularClient').provider('BudgetAlerts', function() {
         params.view = data.view;
         delete data.view;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return new BudgetAlertType(response.data);
+          return _.uniqBy(response.data, function(el) {
+            return new BudgetAlertType(el);
+          });
         }
-      });
+      }), true);
     };
     /**
      * @ngdoc method
@@ -446,7 +466,7 @@ angular.module('AnalyticsAngularClient').provider('BudgetAlerts', function() {
         params.view = data.view;
         delete data.view;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -455,7 +475,7 @@ angular.module('AnalyticsAngularClient').provider('BudgetAlerts', function() {
         if (response.code === 200) {
           return new BudgetAlertType(response.data);
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -507,7 +527,7 @@ angular.module('AnalyticsAngularClient').provider('BudgetAlerts', function() {
       if (data.attach_csv != null) {
         payload.attach_csv = data.attach_csv.encodeJSON ? data.attach_csv.encodeJSON() : data.attach_csv;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -517,7 +537,7 @@ angular.module('AnalyticsAngularClient').provider('BudgetAlerts', function() {
         if (response.code === 200) {
           return new BudgetAlertType(response.data);
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -546,7 +566,7 @@ angular.module('AnalyticsAngularClient').provider('BudgetAlerts', function() {
         'X-API-VERSION': '1.0'
       };
       var params = {};
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -555,7 +575,7 @@ angular.module('AnalyticsAngularClient').provider('BudgetAlerts', function() {
         if (response.code === 204) {
           return response.data;
         }
-      });
+      }));
     };
     return api;
   };
@@ -568,7 +588,7 @@ angular.module('AnalyticsAngularClient').provider('BudgetAlerts', function() {
  * Handles communication with the AnalyticsAngularClient API.
  */
 angular.module('AnalyticsAngularClient').provider('CloudBillMetrics', function() {
-  this.$get = function($http, TimeSeriesMetricsResultType) {
+  this.$get = function($http, wrapPromise, TimeSeriesMetricsResultType) {
     var api = {};
     /**
  * @ngdoc method
@@ -625,16 +645,18 @@ angular.module('AnalyticsAngularClient').provider('CloudBillMetrics', function()
         params.group = data.group.encodeJSON ? data.group.encodeJSON() : data.group;
         delete data.group;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return new TimeSeriesMetricsResultType(response.data);
+          return _.uniqBy(response.data, function(el) {
+            return new TimeSeriesMetricsResultType(el);
+          });
         }
-      });
+      }), true);
     };
     return api;
   };
@@ -647,7 +669,7 @@ angular.module('AnalyticsAngularClient').provider('CloudBillMetrics', function()
  * Handles communication with the AnalyticsAngularClient API.
  */
 angular.module('AnalyticsAngularClient').provider('CloudBills', function() {
-  this.$get = function($http, FilterType) {
+  this.$get = function($http, wrapPromise, FilterType) {
     var api = {};
     /**
      * @ngdoc method
@@ -702,16 +724,18 @@ angular.module('AnalyticsAngularClient').provider('CloudBills', function() {
         params.filter_types = data.filter_types.encodeJSON ? data.filter_types.encodeJSON() : data.filter_types;
         delete data.filter_types;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return new FilterType(response.data);
+          return _.uniqBy(response.data, function(el) {
+            return new FilterType(el);
+          });
         }
-      });
+      }), true);
     };
     /**
      * @ngdoc method
@@ -756,7 +780,7 @@ angular.module('AnalyticsAngularClient').provider('CloudBills', function() {
         params.end_time = data.end_time.encodeJSON ? data.end_time.encodeJSON() : data.end_time;
         delete data.end_time;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -768,7 +792,7 @@ angular.module('AnalyticsAngularClient').provider('CloudBills', function() {
         if (response.code === 200) {
           return response.data;
         }
-      });
+      }));
     };
     return api;
   };
@@ -781,7 +805,7 @@ angular.module('AnalyticsAngularClient').provider('CloudBills', function() {
  * Handles communication with the AnalyticsAngularClient API.
  */
 angular.module('AnalyticsAngularClient').provider('CurrentUser', function() {
-  this.$get = function($http, CurrentUserType, UserOnboardingStatusType, UserEnvironmentType) {
+  this.$get = function($http, wrapPromise, CurrentUserType, UserOnboardingStatusType) {
     var api = {};
     /**
      * @ngdoc method
@@ -814,7 +838,7 @@ angular.module('AnalyticsAngularClient').provider('CurrentUser', function() {
         params.view = data.view;
         delete data.view;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -823,7 +847,7 @@ angular.module('AnalyticsAngularClient').provider('CurrentUser', function() {
         if (response.code === 200) {
           return new CurrentUserType(response.data);
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -886,7 +910,7 @@ angular.module('AnalyticsAngularClient').provider('CurrentUser', function() {
       if (data.new_password_confirmation != null) {
         payload.new_password_confirmation = data.new_password_confirmation;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -896,7 +920,7 @@ angular.module('AnalyticsAngularClient').provider('CurrentUser', function() {
         if (response.code === 200) {
           return new CurrentUserType(response.data);
         }
-      });
+      }));
     };
     /**
  * @ngdoc method
@@ -946,7 +970,7 @@ angular.module('AnalyticsAngularClient').provider('CurrentUser', function() {
       } else {
         payload.aws_secret_access_key = data.aws_secret_access_key;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -955,7 +979,7 @@ angular.module('AnalyticsAngularClient').provider('CurrentUser', function() {
         if (response.code === 201) {
           return response.data;
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -988,7 +1012,7 @@ angular.module('AnalyticsAngularClient').provider('CurrentUser', function() {
         params.view = data.view;
         delete data.view;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -997,43 +1021,7 @@ angular.module('AnalyticsAngularClient').provider('CurrentUser', function() {
         if (response.code === 200) {
           return new UserOnboardingStatusType(response.data);
         }
-      });
-    };
-    /**
-     * @ngdoc method
-     * @name CurrentUser#environment
-     * @param {Object} data
-     *    This represents the data needed to fullfill this request. It is an object
-     *    with the following keys:
-     *
-     * @returns {Promise} A promise for the response object.
-     * @description
-     * Gets various environment settings.
-     * @example
-     *
-     *    CurrentUser.environment({
-     *
-     *    }).then(function(result) {
-     *
-     *    });
-     */
-    api.environment = function(data) {
-      var url = {
-        path: 'undefined/api/current_user/actions/environment',
-        method: 'GET'
-      };
-      var headers = {
-        'X-API-VERSION': '1.0'
-      };
-      return $http({
-        method: url.method,
-        url: url.path,
-        headers: headers,
-      }).then(function(response) {
-        if (response.code === 200) {
-          return new UserEnvironmentType(response.data);
-        }
-      });
+      }));
     };
     return api;
   };
@@ -1046,7 +1034,7 @@ angular.module('AnalyticsAngularClient').provider('CurrentUser', function() {
  * Handles communication with the AnalyticsAngularClient API.
  */
 angular.module('AnalyticsAngularClient').provider('InstanceCombinations', function() {
-  this.$get = function($http, InstanceCombinationType, ReservedInstancePurchaseType) {
+  this.$get = function($http, wrapPromise, InstanceCombinationType, ReservedInstancePurchaseType) {
     var api = {};
     /**
      * @ngdoc method
@@ -1119,7 +1107,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceCombinations', functi
       if (data.patterns != null) {
         payload.patterns = data.patterns.encodeJSON ? data.patterns.encodeJSON() : data.patterns;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -1129,7 +1117,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceCombinations', functi
         if (response.code === 201) {
           return new InstanceCombinationType(response.data);
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -1162,7 +1150,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceCombinations', functi
         params.view = data.view;
         delete data.view;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -1171,7 +1159,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceCombinations', functi
         if (response.code === 200) {
           return new InstanceCombinationType(response.data);
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -1232,7 +1220,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceCombinations', functi
       if (data.patterns != null) {
         payload.patterns = data.patterns.encodeJSON ? data.patterns.encodeJSON() : data.patterns;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -1242,7 +1230,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceCombinations', functi
         if (response.code === 200) {
           return new InstanceCombinationType(response.data);
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -1271,7 +1259,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceCombinations', functi
         'X-API-VERSION': '1.0'
       };
       var params = {};
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -1280,7 +1268,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceCombinations', functi
         if (response.code === 204) {
           return response.data;
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -1313,7 +1301,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceCombinations', functi
         params.view = data.view;
         delete data.view;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -1322,7 +1310,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceCombinations', functi
         if (response.code === 200) {
           return new ReservedInstancePurchaseType(response.data);
         }
-      });
+      }));
     };
     return api;
   };
@@ -1335,7 +1323,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceCombinations', functi
  * Handles communication with the AnalyticsAngularClient API.
  */
 angular.module('AnalyticsAngularClient').provider('InstanceMetrics', function() {
-  this.$get = function($http, MetricsResultType, TimeSeriesMetricsResultType) {
+  this.$get = function($http, wrapPromise, MetricsResultType, TimeSeriesMetricsResultType) {
     var api = {};
     /**
  * @ngdoc method
@@ -1395,7 +1383,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceMetrics', function() 
         params.instance_filters = data.instance_filters.encodeJSON ? data.instance_filters.encodeJSON() : data.instance_filters;
         delete data.instance_filters;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -1404,7 +1392,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceMetrics', function() 
         if (response.code === 200) {
           return new MetricsResultType(response.data);
         }
-      });
+      }));
     };
     /**
  * @ngdoc method
@@ -1483,16 +1471,18 @@ angular.module('AnalyticsAngularClient').provider('InstanceMetrics', function() 
         params.offset = data.offset;
         delete data.offset;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return new MetricsResultType(response.data);
+          return _.uniqBy(response.data, function(el) {
+            return new MetricsResultType(el);
+          });
         }
-      });
+      }), true);
     };
     /**
  * @ngdoc method
@@ -1563,16 +1553,18 @@ angular.module('AnalyticsAngularClient').provider('InstanceMetrics', function() 
         params.interval = data.interval;
         delete data.interval;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return new TimeSeriesMetricsResultType(response.data);
+          return _.uniqBy(response.data, function(el) {
+            return new TimeSeriesMetricsResultType(el);
+          });
         }
-      });
+      }), true);
     };
     /**
  * @ngdoc method
@@ -1662,16 +1654,18 @@ angular.module('AnalyticsAngularClient').provider('InstanceMetrics', function() 
         params.offset = data.offset;
         delete data.offset;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return new TimeSeriesMetricsResultType(response.data);
+          return _.uniqBy(response.data, function(el) {
+            return new TimeSeriesMetricsResultType(el);
+          });
         }
-      });
+      }), true);
     };
     /**
      * @ngdoc method
@@ -1704,7 +1698,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceMetrics', function() 
         params.instance_filters = data.instance_filters.encodeJSON ? data.instance_filters.encodeJSON() : data.instance_filters;
         delete data.instance_filters;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -1713,7 +1707,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceMetrics', function() 
         if (response.code === 200) {
           return response.data;
         }
-      });
+      }));
     };
     return api;
   };
@@ -1726,7 +1720,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceMetrics', function() 
  * Handles communication with the AnalyticsAngularClient API.
  */
 angular.module('AnalyticsAngularClient').provider('InstanceUsagePeriods', function() {
-  this.$get = function($http, InstanceUsagePeriodType) {
+  this.$get = function($http, wrapPromise, InstanceUsagePeriodType) {
     var api = {};
     /**
      * @ngdoc method
@@ -1765,16 +1759,18 @@ angular.module('AnalyticsAngularClient').provider('InstanceUsagePeriods', functi
         params.instance_usage_period_filters = data.instance_usage_period_filters.encodeJSON ? data.instance_usage_period_filters.encodeJSON() : data.instance_usage_period_filters;
         delete data.instance_usage_period_filters;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return new InstanceUsagePeriodType(response.data);
+          return _.uniqBy(response.data, function(el) {
+            return new InstanceUsagePeriodType(el);
+          });
         }
-      });
+      }), true);
     };
     return api;
   };
@@ -1787,7 +1783,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceUsagePeriods', functi
  * Handles communication with the AnalyticsAngularClient API.
  */
 angular.module('AnalyticsAngularClient').provider('Instances', function() {
-  this.$get = function($http, InstanceType, FilterType) {
+  this.$get = function($http, wrapPromise, InstanceType, FilterType) {
     var api = {};
     /**
      * @ngdoc method
@@ -1852,16 +1848,18 @@ angular.module('AnalyticsAngularClient').provider('Instances', function() {
         params.offset = data.offset;
         delete data.offset;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return new InstanceType(response.data);
+          return _.uniqBy(response.data, function(el) {
+            return new InstanceType(el);
+          });
         }
-      });
+      }), true);
     };
     /**
      * @ngdoc method
@@ -1910,7 +1908,7 @@ angular.module('AnalyticsAngularClient').provider('Instances', function() {
         params.instance_filters = data.instance_filters.encodeJSON ? data.instance_filters.encodeJSON() : data.instance_filters;
         delete data.instance_filters;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -1919,7 +1917,7 @@ angular.module('AnalyticsAngularClient').provider('Instances', function() {
         if (response.code === 200) {
           return response.data;
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -1964,7 +1962,7 @@ angular.module('AnalyticsAngularClient').provider('Instances', function() {
         params.instance_filters = data.instance_filters.encodeJSON ? data.instance_filters.encodeJSON() : data.instance_filters;
         delete data.instance_filters;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -1973,7 +1971,7 @@ angular.module('AnalyticsAngularClient').provider('Instances', function() {
         if (response.code === 200) {
           return response.data;
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -2038,7 +2036,7 @@ angular.module('AnalyticsAngularClient').provider('Instances', function() {
         params.offset = data.offset;
         delete data.offset;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -2047,7 +2045,7 @@ angular.module('AnalyticsAngularClient').provider('Instances', function() {
         if (response.code === 200) {
           return response.data;
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -2122,16 +2120,18 @@ angular.module('AnalyticsAngularClient').provider('Instances', function() {
         params.search_term = data.search_term;
         delete data.search_term;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return new FilterType(response.data);
+          return _.uniqBy(response.data, function(el) {
+            return new FilterType(el);
+          });
         }
-      });
+      }), true);
     };
     return api;
   };
@@ -2144,7 +2144,7 @@ angular.module('AnalyticsAngularClient').provider('Instances', function() {
  * Handles communication with the AnalyticsAngularClient API.
  */
 angular.module('AnalyticsAngularClient').provider('Patterns', function() {
-  this.$get = function($http, PatternType) {
+  this.$get = function($http, wrapPromise, PatternType) {
     var api = {};
     /**
      * @ngdoc method
@@ -2211,7 +2211,7 @@ angular.module('AnalyticsAngularClient').provider('Patterns', function() {
       } else {
         payload.months = data.months;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -2221,7 +2221,7 @@ angular.module('AnalyticsAngularClient').provider('Patterns', function() {
         if (response.code === 201) {
           return new PatternType(response.data);
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -2254,16 +2254,18 @@ angular.module('AnalyticsAngularClient').provider('Patterns', function() {
         params.view = data.view;
         delete data.view;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return new PatternType(response.data);
+          return _.uniqBy(response.data, function(el) {
+            return new PatternType(el);
+          });
         }
-      });
+      }), true);
     };
     /**
      * @ngdoc method
@@ -2296,7 +2298,7 @@ angular.module('AnalyticsAngularClient').provider('Patterns', function() {
         params.view = data.view;
         delete data.view;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -2305,7 +2307,7 @@ angular.module('AnalyticsAngularClient').provider('Patterns', function() {
         if (response.code === 200) {
           return new PatternType(response.data);
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -2360,7 +2362,7 @@ angular.module('AnalyticsAngularClient').provider('Patterns', function() {
       if (data.months != null) {
         payload.months = data.months;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -2370,7 +2372,7 @@ angular.module('AnalyticsAngularClient').provider('Patterns', function() {
         if (response.code === 200) {
           return new PatternType(response.data);
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -2399,7 +2401,7 @@ angular.module('AnalyticsAngularClient').provider('Patterns', function() {
         'X-API-VERSION': '1.0'
       };
       var params = {};
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -2408,7 +2410,7 @@ angular.module('AnalyticsAngularClient').provider('Patterns', function() {
         if (response.code === 204) {
           return response.data;
         }
-      });
+      }));
     };
     /**
  * @ngdoc method
@@ -2444,7 +2446,7 @@ angular.module('AnalyticsAngularClient').provider('Patterns', function() {
         params.view = data.view;
         delete data.view;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -2453,7 +2455,7 @@ angular.module('AnalyticsAngularClient').provider('Patterns', function() {
         if (response.code === 200) {
           return new PatternType(response.data);
         }
-      });
+      }));
     };
     return api;
   };
@@ -2466,7 +2468,7 @@ angular.module('AnalyticsAngularClient').provider('Patterns', function() {
  * Handles communication with the AnalyticsAngularClient API.
  */
 angular.module('AnalyticsAngularClient').provider('ReservedInstancePurchases', function() {
-  this.$get = function($http, ReservedInstancePurchaseType) {
+  this.$get = function($http, wrapPromise, ReservedInstancePurchaseType) {
     var api = {};
     /**
      * @ngdoc method
@@ -2525,7 +2527,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstancePurchases', f
       } else {
         payload.auto_renew = data.auto_renew.encodeJSON ? data.auto_renew.encodeJSON() : data.auto_renew;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -2535,7 +2537,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstancePurchases', f
         if (response.code === 201) {
           return new ReservedInstancePurchaseType(response.data);
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -2568,16 +2570,18 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstancePurchases', f
         params.view = data.view;
         delete data.view;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return new ReservedInstancePurchaseType(response.data);
+          return _.uniqBy(response.data, function(el) {
+            return new ReservedInstancePurchaseType(el);
+          });
         }
-      });
+      }), true);
     };
     /**
      * @ngdoc method
@@ -2610,7 +2614,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstancePurchases', f
         params.view = data.view;
         delete data.view;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -2619,7 +2623,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstancePurchases', f
         if (response.code === 200) {
           return new ReservedInstancePurchaseType(response.data);
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -2668,7 +2672,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstancePurchases', f
       if (data.auto_renew != null) {
         payload.auto_renew = data.auto_renew.encodeJSON ? data.auto_renew.encodeJSON() : data.auto_renew;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -2678,7 +2682,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstancePurchases', f
         if (response.code === 200) {
           return new ReservedInstancePurchaseType(response.data);
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -2707,7 +2711,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstancePurchases', f
         'X-API-VERSION': '1.0'
       };
       var params = {};
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -2716,7 +2720,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstancePurchases', f
         if (response.code === 204) {
           return response.data;
         }
-      });
+      }));
     };
     return api;
   };
@@ -2729,7 +2733,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstancePurchases', f
  * Handles communication with the AnalyticsAngularClient API.
  */
 angular.module('AnalyticsAngularClient').provider('ReservedInstances', function() {
-  this.$get = function($http, ReservedInstanceType, FilterType) {
+  this.$get = function($http, wrapPromise, ReservedInstanceType, FilterType) {
     var api = {};
     /**
      * @ngdoc method
@@ -2794,16 +2798,18 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstances', function(
         params.offset = data.offset;
         delete data.offset;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return new ReservedInstanceType(response.data);
+          return _.uniqBy(response.data, function(el) {
+            return new ReservedInstanceType(el);
+          });
         }
-      });
+      }), true);
     };
     /**
      * @ngdoc method
@@ -2852,7 +2858,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstances', function(
         params.reserved_instance_filters = data.reserved_instance_filters.encodeJSON ? data.reserved_instance_filters.encodeJSON() : data.reserved_instance_filters;
         delete data.reserved_instance_filters;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -2861,7 +2867,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstances', function(
         if (response.code === 200) {
           return response.data;
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -2906,7 +2912,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstances', function(
         params.reserved_instance_filters = data.reserved_instance_filters.encodeJSON ? data.reserved_instance_filters.encodeJSON() : data.reserved_instance_filters;
         delete data.reserved_instance_filters;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -2915,7 +2921,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstances', function(
         if (response.code === 200) {
           return response.data;
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -2980,7 +2986,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstances', function(
         params.offset = data.offset;
         delete data.offset;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -2989,7 +2995,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstances', function(
         if (response.code === 200) {
           return response.data;
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -3062,16 +3068,18 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstances', function(
         params.search_term = data.search_term;
         delete data.search_term;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return new FilterType(response.data);
+          return _.uniqBy(response.data, function(el) {
+            return new FilterType(el);
+          });
         }
-      });
+      }), true);
     };
     return api;
   };
@@ -3084,7 +3092,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstances', function(
  * Handles communication with the AnalyticsAngularClient API.
  */
 angular.module('AnalyticsAngularClient').provider('Scenarios', function() {
-  this.$get = function($http, ScenarioType, TimeSeriesMetricsResultType) {
+  this.$get = function($http, wrapPromise, ScenarioType, TimeSeriesMetricsResultType) {
     var api = {};
     /**
      * @ngdoc method
@@ -3138,7 +3146,7 @@ angular.module('AnalyticsAngularClient').provider('Scenarios', function() {
       if (data.is_blank != null) {
         payload.is_blank = data.is_blank.encodeJSON ? data.is_blank.encodeJSON() : data.is_blank;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -3148,7 +3156,7 @@ angular.module('AnalyticsAngularClient').provider('Scenarios', function() {
         if (response.code === 201) {
           return new ScenarioType(response.data);
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -3185,16 +3193,18 @@ angular.module('AnalyticsAngularClient').provider('Scenarios', function() {
         params.include_non_persisted = data.include_non_persisted.encodeJSON ? data.include_non_persisted.encodeJSON() : data.include_non_persisted;
         delete data.include_non_persisted;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return new ScenarioType(response.data);
+          return _.uniqBy(response.data, function(el) {
+            return new ScenarioType(el);
+          });
         }
-      });
+      }), true);
     };
     /**
      * @ngdoc method
@@ -3227,7 +3237,7 @@ angular.module('AnalyticsAngularClient').provider('Scenarios', function() {
         params.view = data.view;
         delete data.view;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -3236,7 +3246,7 @@ angular.module('AnalyticsAngularClient').provider('Scenarios', function() {
         if (response.code === 200) {
           return new ScenarioType(response.data);
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -3282,7 +3292,7 @@ angular.module('AnalyticsAngularClient').provider('Scenarios', function() {
       if (data.private_cloud_instance_count != null) {
         payload.private_cloud_instance_count = data.private_cloud_instance_count;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -3292,7 +3302,7 @@ angular.module('AnalyticsAngularClient').provider('Scenarios', function() {
         if (response.code === 200) {
           return new ScenarioType(response.data);
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -3321,7 +3331,7 @@ angular.module('AnalyticsAngularClient').provider('Scenarios', function() {
         'X-API-VERSION': '1.0'
       };
       var params = {};
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -3330,7 +3340,7 @@ angular.module('AnalyticsAngularClient').provider('Scenarios', function() {
         if (response.code === 204) {
           return response.data;
         }
-      });
+      }));
     };
     /**
  * @ngdoc method
@@ -3365,7 +3375,7 @@ angular.module('AnalyticsAngularClient').provider('Scenarios', function() {
         params.view = data.view;
         delete data.view;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -3374,7 +3384,7 @@ angular.module('AnalyticsAngularClient').provider('Scenarios', function() {
         if (response.code === 200) {
           return new TimeSeriesMetricsResultType(response.data);
         }
-      });
+      }));
     };
     return api;
   };
@@ -3387,7 +3397,7 @@ angular.module('AnalyticsAngularClient').provider('Scenarios', function() {
  * Handles communication with the AnalyticsAngularClient API.
  */
 angular.module('AnalyticsAngularClient').provider('ScheduledReports', function() {
-  this.$get = function($http, ScheduledReportType) {
+  this.$get = function($http, wrapPromise, ScheduledReportType) {
     var api = {};
     /**
      * @ngdoc method
@@ -3440,7 +3450,7 @@ angular.module('AnalyticsAngularClient').provider('ScheduledReports', function()
       if (data.filters != null) {
         payload.filters = data.filters.encodeJSON ? data.filters.encodeJSON() : data.filters;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -3450,7 +3460,7 @@ angular.module('AnalyticsAngularClient').provider('ScheduledReports', function()
         if (response.code === 201) {
           return new ScheduledReportType(response.data);
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -3483,16 +3493,18 @@ angular.module('AnalyticsAngularClient').provider('ScheduledReports', function()
         params.view = data.view;
         delete data.view;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return new ScheduledReportType(response.data);
+          return _.uniqBy(response.data, function(el) {
+            return new ScheduledReportType(el);
+          });
         }
-      });
+      }), true);
     };
     /**
      * @ngdoc method
@@ -3525,7 +3537,7 @@ angular.module('AnalyticsAngularClient').provider('ScheduledReports', function()
         params.view = data.view;
         delete data.view;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -3534,7 +3546,7 @@ angular.module('AnalyticsAngularClient').provider('ScheduledReports', function()
         if (response.code === 200) {
           return new ScheduledReportType(response.data);
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -3580,7 +3592,7 @@ angular.module('AnalyticsAngularClient').provider('ScheduledReports', function()
       if (data.attach_csv != null) {
         payload.attach_csv = data.attach_csv.encodeJSON ? data.attach_csv.encodeJSON() : data.attach_csv;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -3590,7 +3602,7 @@ angular.module('AnalyticsAngularClient').provider('ScheduledReports', function()
         if (response.code === 200) {
           return new ScheduledReportType(response.data);
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -3619,7 +3631,7 @@ angular.module('AnalyticsAngularClient').provider('ScheduledReports', function()
         'X-API-VERSION': '1.0'
       };
       var params = {};
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -3628,7 +3640,7 @@ angular.module('AnalyticsAngularClient').provider('ScheduledReports', function()
         if (response.code === 204) {
           return response.data;
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -3661,7 +3673,7 @@ angular.module('AnalyticsAngularClient').provider('ScheduledReports', function()
         params.view = data.view;
         delete data.view;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -3670,7 +3682,7 @@ angular.module('AnalyticsAngularClient').provider('ScheduledReports', function()
         if (response.code === 200) {
           return new ScheduledReportType(response.data);
         }
-      });
+      }));
     };
     return api;
   };
@@ -3683,7 +3695,7 @@ angular.module('AnalyticsAngularClient').provider('ScheduledReports', function()
  * Handles communication with the AnalyticsAngularClient API.
  */
 angular.module('AnalyticsAngularClient').provider('TempInstancePrices', function() {
-  this.$get = function($http) {
+  this.$get = function($http, wrapPromise) {
     var api = {};
     /**
      * @ngdoc method
@@ -3711,7 +3723,7 @@ angular.module('AnalyticsAngularClient').provider('TempInstancePrices', function
       var headers = {
         'X-API-VERSION': '1.0'
       };
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -3719,7 +3731,7 @@ angular.module('AnalyticsAngularClient').provider('TempInstancePrices', function
         if (response.code === 200) {
           return response.data;
         }
-      });
+      }));
     };
     return api;
   };
@@ -3732,7 +3744,7 @@ angular.module('AnalyticsAngularClient').provider('TempInstancePrices', function
  * Handles communication with the AnalyticsAngularClient API.
  */
 angular.module('AnalyticsAngularClient').provider('UserSettings', function() {
-  this.$get = function($http, UserSettingType) {
+  this.$get = function($http, wrapPromise, UserSettingType) {
     var api = {};
     /**
      * @ngdoc method
@@ -3765,7 +3777,7 @@ angular.module('AnalyticsAngularClient').provider('UserSettings', function() {
         params.view = data.view;
         delete data.view;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -3774,7 +3786,7 @@ angular.module('AnalyticsAngularClient').provider('UserSettings', function() {
         if (response.code === 200) {
           return new UserSettingType(response.data);
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -3844,7 +3856,7 @@ angular.module('AnalyticsAngularClient').provider('UserSettings', function() {
       if (data.excluded_tag_types != null) {
         payload.excluded_tag_types = data.excluded_tag_types.encodeJSON ? data.excluded_tag_types.encodeJSON() : data.excluded_tag_types;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -3854,7 +3866,7 @@ angular.module('AnalyticsAngularClient').provider('UserSettings', function() {
         if (response.code === 200) {
           return new UserSettingType(response.data);
         }
-      });
+      }));
     };
     return api;
   };
@@ -3867,7 +3879,7 @@ angular.module('AnalyticsAngularClient').provider('UserSettings', function() {
  * Handles communication with the AnalyticsAngularClient API.
  */
 angular.module('AnalyticsAngularClient').provider('Users', function() {
-  this.$get = function($http, UserType) {
+  this.$get = function($http, wrapPromise, UserType) {
     var api = {};
     /**
  * @ngdoc method
@@ -3912,7 +3924,7 @@ angular.module('AnalyticsAngularClient').provider('Users', function() {
       } else {
         payload.accounts = data.accounts.encodeJSON ? data.accounts.encodeJSON() : data.accounts;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -3922,7 +3934,7 @@ angular.module('AnalyticsAngularClient').provider('Users', function() {
         if (response.code === 201) {
           return new UserType(response.data);
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -3955,16 +3967,18 @@ angular.module('AnalyticsAngularClient').provider('Users', function() {
         params.view = data.view;
         delete data.view;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return new UserType(response.data);
+          return _.uniqBy(response.data, function(el) {
+            return new UserType(el);
+          });
         }
-      });
+      }), true);
     };
     /**
      * @ngdoc method
@@ -3997,7 +4011,7 @@ angular.module('AnalyticsAngularClient').provider('Users', function() {
         params.view = data.view;
         delete data.view;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -4006,7 +4020,7 @@ angular.module('AnalyticsAngularClient').provider('Users', function() {
         if (response.code === 200) {
           return new UserType(response.data);
         }
-      });
+      }));
     };
     /**
  * @ngdoc method
@@ -4044,7 +4058,7 @@ angular.module('AnalyticsAngularClient').provider('Users', function() {
       if (data.accounts != null) {
         payload.accounts = data.accounts.encodeJSON ? data.accounts.encodeJSON() : data.accounts;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -4054,7 +4068,7 @@ angular.module('AnalyticsAngularClient').provider('Users', function() {
         if (response.code === 200) {
           return new UserType(response.data);
         }
-      });
+      }));
     };
     /**
      * @ngdoc method
@@ -4083,7 +4097,7 @@ angular.module('AnalyticsAngularClient').provider('Users', function() {
         'X-API-VERSION': '1.0'
       };
       var params = {};
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -4092,7 +4106,7 @@ angular.module('AnalyticsAngularClient').provider('Users', function() {
         if (response.code === 204) {
           return response.data;
         }
-      });
+      }));
     };
     /**
  * @ngdoc method
@@ -4137,7 +4151,7 @@ angular.module('AnalyticsAngularClient').provider('Users', function() {
       if (data.message != null) {
         payload.message = data.message;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -4146,7 +4160,7 @@ angular.module('AnalyticsAngularClient').provider('Users', function() {
         if (response.code === 200) {
           return new UserType(response.data);
         }
-      });
+      }));
     };
     return api;
   };
@@ -4159,7 +4173,7 @@ angular.module('AnalyticsAngularClient').provider('Users', function() {
  * Handles communication with the AnalyticsAngularClient API.
  */
 angular.module('AnalyticsAngularClient').provider('UtilizationReport', function() {
-  this.$get = function($http) {
+  this.$get = function($http, wrapPromise) {
     var api = {};
     /**
      * @ngdoc method
@@ -4204,7 +4218,7 @@ angular.module('AnalyticsAngularClient').provider('UtilizationReport', function(
         params.instance_filters = data.instance_filters.encodeJSON ? data.instance_filters.encodeJSON() : data.instance_filters;
         delete data.instance_filters;
       }
-      return $http({
+      return wrapPromise($http({
         method: url.method,
         url: url.path,
         headers: headers,
@@ -4213,7 +4227,7 @@ angular.module('AnalyticsAngularClient').provider('UtilizationReport', function(
         if (response.code === 200) {
           return response.data;
         }
-      });
+      }));
     };
     return api;
   };
@@ -4385,7 +4399,7 @@ angular.module('AnalyticsAngularClient').provider('AccountType', function() {
        * The account's cloud accounts.
        */
       // Currently the existence of this type is assumed
-      this.cloudAccounts = (data['cloud_accounts'] || []).map(function(element) {
+      this.cloudAccounts = _.uniqBy((data['cloud_accounts'] || []), function(element) {
         return new CloudAccountType(element);
       });
     }
@@ -4393,7 +4407,7 @@ angular.module('AnalyticsAngularClient').provider('AccountType', function() {
 });
 
 angular.module('AnalyticsAngularClient').provider('AnalysisSnapshotType', function() {
-  this.$get = function(SetType, FilterType, ModuleStateType) {
+  this.$get = function(FilterType, ModuleStateType, SetType) {
     function AnalysisSnapshotType(data) {
       /**
        * @ngdoc property
@@ -4478,12 +4492,11 @@ angular.module('AnalyticsAngularClient').provider('AnalysisSnapshotType', functi
       /**
        * @ngdoc property
        * @name AnalysisSnapshotType.metrics
-       * @type {SetType}
+       * @type {Array}
        * @description
        * Metrics that should be included in the snapshot.
        */
-      // Currently the existence of this type is assumed
-      this.metrics = new SetType(data['metrics']);
+      this.metrics = data['metrics'];
       /**
        * @ngdoc property
        * @name AnalysisSnapshotType.filters
@@ -4492,7 +4505,7 @@ angular.module('AnalyticsAngularClient').provider('AnalysisSnapshotType', functi
        * Filters used to create the snapshot
        */
       // Currently the existence of this type is assumed
-      this.filters = (data['filters'] || []).map(function(element) {
+      this.filters = _.uniqBy((data['filters'] || []), function(element) {
         return new FilterType(element);
       });
       /**
@@ -4503,7 +4516,7 @@ angular.module('AnalyticsAngularClient').provider('AnalysisSnapshotType', functi
        * Used by the Cloud Analytics UI to store the state of the snapshot modules based on the state of the Analyze page modules.
        */
       // Currently the existence of this type is assumed
-      this.moduleStates = (data['module_states'] || []).map(function(element) {
+      this.moduleStates = _.uniqBy((data['module_states'] || []), function(element) {
         return new ModuleStateType(element);
       });
       /**
@@ -4611,7 +4624,7 @@ angular.module('AnalyticsAngularClient').provider('BudgetAlertType', function() 
        * Filters to use for the BudgetAlert.
        */
       // Currently the existence of this type is assumed
-      this.filters = (data['filters'] || []).map(function(element) {
+      this.filters = _.uniqBy((data['filters'] || []), function(element) {
         return new FilterType(element);
       });
       /**
@@ -5035,7 +5048,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceType', function() {
        * undefined
        */
       // Currently the existence of this type is assumed
-      this.tags = (data['tags'] || []).map(function(element) {
+      this.tags = _.uniqBy((data['tags'] || []), function(element) {
         return new TagType(element);
       });
       /**
@@ -5174,7 +5187,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceCombinationType', fun
        * Patterns applied to the InstanceCombination, in the order that they are applied.
        */
       // Currently the existence of this type is assumed
-      this.patterns = (data['patterns'] || []).map(function(element) {
+      this.patterns = _.uniqBy((data['patterns'] || []), function(element) {
         return new PatternType(element);
       });
       /**
@@ -5185,7 +5198,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceCombinationType', fun
        * Reserved Instance purchases applied to the instance combination.
        */
       // Currently the existence of this type is assumed
-      this.reservedInstancePurchases = (data['reserved_instance_purchases'] || []).map(function(element) {
+      this.reservedInstancePurchases = _.uniqBy((data['reserved_instance_purchases'] || []), function(element) {
         return new ReservedInstancePurchaseType(element);
       });
       /**
@@ -5451,7 +5464,7 @@ angular.module('AnalyticsAngularClient').provider('MetricsResultType', function(
        * The nested metric results requested by the `group` parameter.
        */
       // Currently the existence of this type is assumed
-      this.breakdownMetricsResults = (data['breakdown_metrics_results'] || []).map(function(element) {
+      this.breakdownMetricsResults = _.uniqBy((data['breakdown_metrics_results'] || []), function(element) {
         return new MetricsResultType(element);
       });
     }
@@ -5618,7 +5631,7 @@ angular.module('AnalyticsAngularClient').provider('PatternType', function() {
        * Collection of Scenarios that use this pattern.
        */
       // Currently the existence of this type is assumed
-      this.scenarios = (data['scenarios'] || []).map(function(element) {
+      this.scenarios = _.uniqBy((data['scenarios'] || []), function(element) {
         return new ScenarioType(element);
       });
     }
@@ -5964,7 +5977,7 @@ angular.module('AnalyticsAngularClient').provider('ScenarioType', function() {
        * Filters to use for the Scenario.
        */
       // Currently the existence of this type is assumed
-      this.filters = (data['filters'] || []).map(function(element) {
+      this.filters = _.uniqBy((data['filters'] || []), function(element) {
         return new FilterType(element);
       });
       /**
@@ -5975,7 +5988,7 @@ angular.module('AnalyticsAngularClient').provider('ScenarioType', function() {
        * The `average_instance_count` and `total_cost` of the scenario for the last 12 months.
        */
       // Currently the existence of this type is assumed
-      this.historicMetricsResults = (data['historic_metrics_results'] || []).map(function(element) {
+      this.historicMetricsResults = _.uniqBy((data['historic_metrics_results'] || []), function(element) {
         return new TimeSeriesMetricsResultType(element);
       });
       /**
@@ -5994,7 +6007,7 @@ angular.module('AnalyticsAngularClient').provider('ScenarioType', function() {
        * InstanceCombinations in the Scenario.
        */
       // Currently the existence of this type is assumed
-      this.instanceCombinations = (data['instance_combinations'] || []).map(function(element) {
+      this.instanceCombinations = _.uniqBy((data['instance_combinations'] || []), function(element) {
         return new InstanceCombinationType(element);
       });
       /**
@@ -6087,7 +6100,7 @@ angular.module('AnalyticsAngularClient').provider('ScheduledReportType', functio
        * Filters to use for the ScheduledReport.
        */
       // Currently the existence of this type is assumed
-      this.filters = (data['filters'] || []).map(function(element) {
+      this.filters = _.uniqBy((data['filters'] || []), function(element) {
         return new FilterType(element);
       });
       /**
@@ -6176,7 +6189,7 @@ angular.module('AnalyticsAngularClient').provider('TimeSeriesMetricsResultType',
        * undefined
        */
       // Currently the existence of this type is assumed
-      this.results = (data['results'] || []).map(function(element) {
+      this.results = _.uniqBy((data['results'] || []), function(element) {
         return new MetricsResultType(element);
       });
     }
@@ -6226,7 +6239,7 @@ angular.module('AnalyticsAngularClient').provider('UserType', function() {
        * List of accounts that the user has access to.
        */
       // Currently the existence of this type is assumed
-      this.accounts = (data['accounts'] || []).map(function(element) {
+      this.accounts = _.uniqBy((data['accounts'] || []), function(element) {
         return new UserAccountsType(element);
       });
       /**
@@ -6319,14 +6332,6 @@ angular.module('AnalyticsAngularClient').provider('UserAccountsType', function()
 angular.module('AnalyticsAngularClient').provider('UserEnvironmentType', function() {
   this.$get = function(UserSettingType) {
     function UserEnvironmentType(data) {
-      /**
-       * @ngdoc property
-       * @name UserEnvironmentType.kind
-       * @type {String}
-       * @description
-       * undefined
-       */
-      this.kind = data['kind'];
       /**
        * @ngdoc property
        * @name UserEnvironmentType.environment
@@ -6509,7 +6514,7 @@ The key is the ID of the table (i.e. `instance_datatable`), the Set is the visib
        * These are the modules displayed on the Analyze Page.
        */
       // Currently the existence of this type is assumed
-      this.moduleStates = (data['module_states'] || []).map(function(element) {
+      this.moduleStates = _.uniqBy((data['module_states'] || []), function(element) {
         return new ModuleStateType(element);
       });
       /**
@@ -6520,18 +6525,17 @@ The key is the ID of the table (i.e. `instance_datatable`), the Set is the visib
        * Filters the user has currently *applied* on the Analyze Page
        */
       // Currently the existence of this type is assumed
-      this.filters = (data['filters'] || []).map(function(element) {
+      this.filters = _.uniqBy((data['filters'] || []), function(element) {
         return new FilterType(element);
       });
       /**
        * @ngdoc property
        * @name UserSettingType.metrics
-       * @type {SetType}
+       * @type {Array}
        * @description
        * undefined
        */
-      // Currently the existence of this type is assumed
-      this.metrics = new SetType(data['metrics']);
+      this.metrics = data['metrics'];
       /**
        * @ngdoc property
        * @name UserSettingType.excludedTagTypes

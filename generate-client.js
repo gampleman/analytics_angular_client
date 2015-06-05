@@ -5,6 +5,7 @@ module.exports = function(Package, builtin) {
       globalConfig.outputPath = '.';
       globalConfig.moduleName = 'AnalyticsAngularClient';
       globalConfig.project = false;
+      globalConfig.base_path = '';
       globalConfig.debugOverrides = false;
       override('*.type.kind.attribute', ' ');
     });
