@@ -14,9 +14,9 @@ angular.module('AnalyticsAngularClient').value('wrapPromise', function(promise, 
   }
   promise.then(function(result) {
     if (isArray) {
-      _.uniqBy(promise, result);
+      _.fill(promise, result);
     } else {
-      _.uniqBy(promise, result);
+      _.merge(promise, result);
     }
     return result;
   });
@@ -53,7 +53,7 @@ angular.module('AnalyticsAngularClient').provider('Accounts', function() {
      */
     api.create = function(data) {
       var url = {
-        path: 'undefined/api/accounts',
+        path: '/api/accounts',
         method: 'POST'
       };
       var headers = {
@@ -110,7 +110,7 @@ angular.module('AnalyticsAngularClient').provider('Accounts', function() {
      */
     api.index = function(data) {
       var url = {
-        path: 'undefined/api/accounts',
+        path: '/api/accounts',
         method: 'GET'
       };
       var headers = {
@@ -128,7 +128,7 @@ angular.module('AnalyticsAngularClient').provider('Accounts', function() {
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return _.uniqBy(response.data, function(el) {
+          return _.map(response.data, function(el) {
             return new AccountType(el);
           });
         }
@@ -154,7 +154,7 @@ angular.module('AnalyticsAngularClient').provider('Accounts', function() {
      */
     api.show = function(data) {
       var url = {
-        path: 'undefined/api/accounts/' + data.id + '',
+        path: '/api/accounts/' + data.id + '',
         method: 'GET'
       };
       var headers = {
@@ -209,7 +209,7 @@ angular.module('AnalyticsAngularClient').provider('AnalysisSnapshots', function(
      */
     api.create = function(data) {
       var url = {
-        path: 'undefined/api/analysis_snapshots',
+        path: '/api/analysis_snapshots',
         method: 'POST'
       };
       var headers = {
@@ -283,7 +283,7 @@ angular.module('AnalyticsAngularClient').provider('AnalysisSnapshots', function(
      */
     api.show = function(data) {
       var url = {
-        path: 'undefined/api/analysis_snapshots/' + data.uuid + '',
+        path: '/api/analysis_snapshots/' + data.uuid + '',
         method: 'GET'
       };
       var headers = {
@@ -338,7 +338,7 @@ angular.module('AnalyticsAngularClient').provider('BudgetAlerts', function() {
      */
     api.create = function(data) {
       var url = {
-        path: 'undefined/api/budget_alerts',
+        path: '/api/budget_alerts',
         method: 'POST'
       };
       var headers = {
@@ -411,7 +411,7 @@ angular.module('AnalyticsAngularClient').provider('BudgetAlerts', function() {
      */
     api.index = function(data) {
       var url = {
-        path: 'undefined/api/budget_alerts',
+        path: '/api/budget_alerts',
         method: 'GET'
       };
       var headers = {
@@ -429,7 +429,7 @@ angular.module('AnalyticsAngularClient').provider('BudgetAlerts', function() {
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return _.uniqBy(response.data, function(el) {
+          return _.map(response.data, function(el) {
             return new BudgetAlertType(el);
           });
         }
@@ -455,7 +455,7 @@ angular.module('AnalyticsAngularClient').provider('BudgetAlerts', function() {
      */
     api.show = function(data) {
       var url = {
-        path: 'undefined/api/budget_alerts/' + data.id + '',
+        path: '/api/budget_alerts/' + data.id + '',
         method: 'GET'
       };
       var headers = {
@@ -497,7 +497,7 @@ angular.module('AnalyticsAngularClient').provider('BudgetAlerts', function() {
      */
     api.update = function(data) {
       var url = {
-        path: 'undefined/api/budget_alerts/' + data.id + '',
+        path: '/api/budget_alerts/' + data.id + '',
         method: 'PATCH'
       };
       var headers = {
@@ -559,7 +559,7 @@ angular.module('AnalyticsAngularClient').provider('BudgetAlerts', function() {
      */
     api.destroy = function(data) {
       var url = {
-        path: 'undefined/api/budget_alerts/' + data.id + '',
+        path: '/api/budget_alerts/' + data.id + '',
         method: 'DELETE'
       };
       var headers = {
@@ -612,7 +612,7 @@ angular.module('AnalyticsAngularClient').provider('CloudBillMetrics', function()
  */
     api.groupedTimeSeries = function(data) {
       var url = {
-        path: 'undefined/api/cloud_bill_metrics/actions/grouped_time_series',
+        path: '/api/cloud_bill_metrics/actions/grouped_time_series',
         method: 'GET'
       };
       var headers = {
@@ -652,7 +652,7 @@ angular.module('AnalyticsAngularClient').provider('CloudBillMetrics', function()
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return _.uniqBy(response.data, function(el) {
+          return _.map(response.data, function(el) {
             return new TimeSeriesMetricsResultType(el);
           });
         }
@@ -691,7 +691,7 @@ angular.module('AnalyticsAngularClient').provider('CloudBills', function() {
      */
     api.filterOptions = function(data) {
       var url = {
-        path: 'undefined/api/cloud_bills/actions/filter_options',
+        path: '/api/cloud_bills/actions/filter_options',
         method: 'GET'
       };
       var headers = {
@@ -731,7 +731,7 @@ angular.module('AnalyticsAngularClient').provider('CloudBills', function() {
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return _.uniqBy(response.data, function(el) {
+          return _.map(response.data, function(el) {
             return new FilterType(el);
           });
         }
@@ -757,7 +757,7 @@ angular.module('AnalyticsAngularClient').provider('CloudBills', function() {
      */
     api.export = function(data) {
       var url = {
-        path: 'undefined/api/cloud_bills/actions/export',
+        path: '/api/cloud_bills/actions/export',
         method: 'GET'
       };
       var headers = {
@@ -827,7 +827,7 @@ angular.module('AnalyticsAngularClient').provider('CurrentUser', function() {
      */
     api.show = function(data) {
       var url = {
-        path: 'undefined/api/current_user',
+        path: '/api/current_user',
         method: 'GET'
       };
       var headers = {
@@ -869,7 +869,7 @@ angular.module('AnalyticsAngularClient').provider('CurrentUser', function() {
      */
     api.update = function(data) {
       var url = {
-        path: 'undefined/api/current_user',
+        path: '/api/current_user',
         method: 'PATCH'
       };
       var headers = {
@@ -943,7 +943,7 @@ angular.module('AnalyticsAngularClient').provider('CurrentUser', function() {
  */
     api.cloudAccounts = function(data) {
       var url = {
-        path: 'undefined/api/current_user/actions/cloud_accounts',
+        path: '/api/current_user/actions/cloud_accounts',
         method: 'POST'
       };
       var headers = {
@@ -1001,7 +1001,7 @@ angular.module('AnalyticsAngularClient').provider('CurrentUser', function() {
      */
     api.onboardingStatus = function(data) {
       var url = {
-        path: 'undefined/api/current_user/actions/onboarding_status',
+        path: '/api/current_user/actions/onboarding_status',
         method: 'GET'
       };
       var headers = {
@@ -1056,7 +1056,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceCombinations', functi
      */
     api.create = function(data) {
       var url = {
-        path: 'undefined/api/scenarios/' + data.scenario_id + '/instance_combinations',
+        path: '/api/scenarios/' + data.scenario_id + '/instance_combinations',
         method: 'POST'
       };
       var headers = {
@@ -1139,7 +1139,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceCombinations', functi
      */
     api.show = function(data) {
       var url = {
-        path: 'undefined/api/scenarios/' + data.scenario_id + '/instance_combinations/:id',
+        path: '/api/scenarios/' + data.scenario_id + '/instance_combinations/:id',
         method: 'GET'
       };
       var headers = {
@@ -1181,7 +1181,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceCombinations', functi
      */
     api.update = function(data) {
       var url = {
-        path: 'undefined/api/scenarios/' + data.scenario_id + '/instance_combinations/:id',
+        path: '/api/scenarios/' + data.scenario_id + '/instance_combinations/:id',
         method: 'PATCH'
       };
       var headers = {
@@ -1252,7 +1252,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceCombinations', functi
      */
     api.destroy = function(data) {
       var url = {
-        path: 'undefined/api/scenarios/' + data.scenario_id + '/instance_combinations/:id',
+        path: '/api/scenarios/' + data.scenario_id + '/instance_combinations/:id',
         method: 'DELETE'
       };
       var headers = {
@@ -1290,7 +1290,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceCombinations', functi
      */
     api.reservedInstancePrices = function(data) {
       var url = {
-        path: 'undefined/api/scenarios/' + data.scenario_id + '/instance_combinations/:id/actions/reserved_instance_prices',
+        path: '/api/scenarios/' + data.scenario_id + '/instance_combinations/:id/actions/reserved_instance_prices',
         method: 'GET'
       };
       var headers = {
@@ -1346,7 +1346,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceMetrics', function() 
  */
     api.overall = function(data) {
       var url = {
-        path: 'undefined/api/instance_metrics/actions/overall',
+        path: '/api/instance_metrics/actions/overall',
         method: 'GET'
       };
       var headers = {
@@ -1416,7 +1416,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceMetrics', function() 
  */
     api.groupedOverall = function(data) {
       var url = {
-        path: 'undefined/api/instance_metrics/actions/grouped_overall',
+        path: '/api/instance_metrics/actions/grouped_overall',
         method: 'GET'
       };
       var headers = {
@@ -1478,7 +1478,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceMetrics', function() 
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return _.uniqBy(response.data, function(el) {
+          return _.map(response.data, function(el) {
             return new MetricsResultType(el);
           });
         }
@@ -1506,7 +1506,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceMetrics', function() 
  */
     api.timeSeries = function(data) {
       var url = {
-        path: 'undefined/api/instance_metrics/actions/time_series',
+        path: '/api/instance_metrics/actions/time_series',
         method: 'GET'
       };
       var headers = {
@@ -1560,7 +1560,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceMetrics', function() 
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return _.uniqBy(response.data, function(el) {
+          return _.map(response.data, function(el) {
             return new TimeSeriesMetricsResultType(el);
           });
         }
@@ -1589,7 +1589,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceMetrics', function() 
  */
     api.groupedTimeSeries = function(data) {
       var url = {
-        path: 'undefined/api/instance_metrics/actions/grouped_time_series',
+        path: '/api/instance_metrics/actions/grouped_time_series',
         method: 'GET'
       };
       var headers = {
@@ -1661,7 +1661,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceMetrics', function() 
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return _.uniqBy(response.data, function(el) {
+          return _.map(response.data, function(el) {
             return new TimeSeriesMetricsResultType(el);
           });
         }
@@ -1687,7 +1687,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceMetrics', function() 
      */
     api.currentCount = function(data) {
       var url = {
-        path: 'undefined/api/instance_metrics/actions/current_count',
+        path: '/api/instance_metrics/actions/current_count',
         method: 'GET'
       };
       var headers = {
@@ -1742,7 +1742,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceUsagePeriods', functi
      */
     api.index = function(data) {
       var url = {
-        path: 'undefined/api/instance_usage_periods',
+        path: '/api/instance_usage_periods',
         method: 'GET'
       };
       var headers = {
@@ -1766,7 +1766,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceUsagePeriods', functi
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return _.uniqBy(response.data, function(el) {
+          return _.map(response.data, function(el) {
             return new InstanceUsagePeriodType(el);
           });
         }
@@ -1805,7 +1805,7 @@ angular.module('AnalyticsAngularClient').provider('Instances', function() {
      */
     api.index = function(data) {
       var url = {
-        path: 'undefined/api/instances',
+        path: '/api/instances',
         method: 'GET'
       };
       var headers = {
@@ -1855,7 +1855,7 @@ angular.module('AnalyticsAngularClient').provider('Instances', function() {
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return _.uniqBy(response.data, function(el) {
+          return _.map(response.data, function(el) {
             return new InstanceType(el);
           });
         }
@@ -1881,7 +1881,7 @@ angular.module('AnalyticsAngularClient').provider('Instances', function() {
      */
     api.count = function(data) {
       var url = {
-        path: 'undefined/api/instances/actions/count',
+        path: '/api/instances/actions/count',
         method: 'GET'
       };
       var headers = {
@@ -1939,7 +1939,7 @@ angular.module('AnalyticsAngularClient').provider('Instances', function() {
      */
     api.exist = function(data) {
       var url = {
-        path: 'undefined/api/instances/actions/exist',
+        path: '/api/instances/actions/exist',
         method: 'GET'
       };
       var headers = {
@@ -1993,7 +1993,7 @@ angular.module('AnalyticsAngularClient').provider('Instances', function() {
      */
     api.export = function(data) {
       var url = {
-        path: 'undefined/api/instances/actions/export',
+        path: '/api/instances/actions/export',
         method: 'GET'
       };
       var headers = {
@@ -2067,7 +2067,7 @@ angular.module('AnalyticsAngularClient').provider('Instances', function() {
      */
     api.filterOptions = function(data) {
       var url = {
-        path: 'undefined/api/instances/actions/filter_options',
+        path: '/api/instances/actions/filter_options',
         method: 'GET'
       };
       var headers = {
@@ -2127,7 +2127,7 @@ angular.module('AnalyticsAngularClient').provider('Instances', function() {
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return _.uniqBy(response.data, function(el) {
+          return _.map(response.data, function(el) {
             return new FilterType(el);
           });
         }
@@ -2166,7 +2166,7 @@ angular.module('AnalyticsAngularClient').provider('Patterns', function() {
      */
     api.create = function(data) {
       var url = {
-        path: 'undefined/api/patterns',
+        path: '/api/patterns',
         method: 'POST'
       };
       var headers = {
@@ -2243,7 +2243,7 @@ angular.module('AnalyticsAngularClient').provider('Patterns', function() {
      */
     api.index = function(data) {
       var url = {
-        path: 'undefined/api/patterns',
+        path: '/api/patterns',
         method: 'GET'
       };
       var headers = {
@@ -2261,7 +2261,7 @@ angular.module('AnalyticsAngularClient').provider('Patterns', function() {
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return _.uniqBy(response.data, function(el) {
+          return _.map(response.data, function(el) {
             return new PatternType(el);
           });
         }
@@ -2287,7 +2287,7 @@ angular.module('AnalyticsAngularClient').provider('Patterns', function() {
      */
     api.show = function(data) {
       var url = {
-        path: 'undefined/api/patterns/' + data.id + '',
+        path: '/api/patterns/' + data.id + '',
         method: 'GET'
       };
       var headers = {
@@ -2329,7 +2329,7 @@ angular.module('AnalyticsAngularClient').provider('Patterns', function() {
      */
     api.update = function(data) {
       var url = {
-        path: 'undefined/api/patterns/' + data.id + '',
+        path: '/api/patterns/' + data.id + '',
         method: 'PATCH'
       };
       var headers = {
@@ -2394,7 +2394,7 @@ angular.module('AnalyticsAngularClient').provider('Patterns', function() {
      */
     api.destroy = function(data) {
       var url = {
-        path: 'undefined/api/patterns/' + data.id + '',
+        path: '/api/patterns/' + data.id + '',
         method: 'DELETE'
       };
       var headers = {
@@ -2435,7 +2435,7 @@ angular.module('AnalyticsAngularClient').provider('Patterns', function() {
  */
     api.createDefaults = function(data) {
       var url = {
-        path: 'undefined/api/patterns/actions/create_defaults',
+        path: '/api/patterns/actions/create_defaults',
         method: 'POST'
       };
       var headers = {
@@ -2490,7 +2490,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstancePurchases', f
      */
     api.create = function(data) {
       var url = {
-        path: 'undefined/api/scenarios/' + data.scenario_id + '/instance_combinations/:instance_combination_id/reserved_instance_purchases',
+        path: '/api/scenarios/' + data.scenario_id + '/instance_combinations/:instance_combination_id/reserved_instance_purchases',
         method: 'POST'
       };
       var headers = {
@@ -2559,7 +2559,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstancePurchases', f
      */
     api.index = function(data) {
       var url = {
-        path: 'undefined/api/scenarios/' + data.scenario_id + '/instance_combinations/:instance_combination_id/reserved_instance_purchases',
+        path: '/api/scenarios/' + data.scenario_id + '/instance_combinations/:instance_combination_id/reserved_instance_purchases',
         method: 'GET'
       };
       var headers = {
@@ -2577,7 +2577,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstancePurchases', f
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return _.uniqBy(response.data, function(el) {
+          return _.map(response.data, function(el) {
             return new ReservedInstancePurchaseType(el);
           });
         }
@@ -2603,7 +2603,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstancePurchases', f
      */
     api.show = function(data) {
       var url = {
-        path: 'undefined/api/scenarios/' + data.scenario_id + '/instance_combinations/:instance_combination_id/reserved_instance_purchases/:id',
+        path: '/api/scenarios/' + data.scenario_id + '/instance_combinations/:instance_combination_id/reserved_instance_purchases/:id',
         method: 'GET'
       };
       var headers = {
@@ -2645,7 +2645,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstancePurchases', f
      */
     api.update = function(data) {
       var url = {
-        path: 'undefined/api/scenarios/' + data.scenario_id + '/instance_combinations/:instance_combination_id/reserved_instance_purchases/:id',
+        path: '/api/scenarios/' + data.scenario_id + '/instance_combinations/:instance_combination_id/reserved_instance_purchases/:id',
         method: 'PATCH'
       };
       var headers = {
@@ -2704,7 +2704,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstancePurchases', f
      */
     api.destroy = function(data) {
       var url = {
-        path: 'undefined/api/scenarios/' + data.scenario_id + '/instance_combinations/:instance_combination_id/reserved_instance_purchases/:id',
+        path: '/api/scenarios/' + data.scenario_id + '/instance_combinations/:instance_combination_id/reserved_instance_purchases/:id',
         method: 'DELETE'
       };
       var headers = {
@@ -2755,7 +2755,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstances', function(
      */
     api.index = function(data) {
       var url = {
-        path: 'undefined/api/reserved_instances',
+        path: '/api/reserved_instances',
         method: 'GET'
       };
       var headers = {
@@ -2805,7 +2805,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstances', function(
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return _.uniqBy(response.data, function(el) {
+          return _.map(response.data, function(el) {
             return new ReservedInstanceType(el);
           });
         }
@@ -2831,7 +2831,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstances', function(
      */
     api.count = function(data) {
       var url = {
-        path: 'undefined/api/reserved_instances/actions/count',
+        path: '/api/reserved_instances/actions/count',
         method: 'GET'
       };
       var headers = {
@@ -2889,7 +2889,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstances', function(
      */
     api.exist = function(data) {
       var url = {
-        path: 'undefined/api/reserved_instances/actions/exist',
+        path: '/api/reserved_instances/actions/exist',
         method: 'GET'
       };
       var headers = {
@@ -2943,7 +2943,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstances', function(
      */
     api.export = function(data) {
       var url = {
-        path: 'undefined/api/reserved_instances/actions/export',
+        path: '/api/reserved_instances/actions/export',
         method: 'GET'
       };
       var headers = {
@@ -3017,7 +3017,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstances', function(
      */
     api.filterOptions = function(data) {
       var url = {
-        path: 'undefined/api/reserved_instances/actions/filter_options',
+        path: '/api/reserved_instances/actions/filter_options',
         method: 'GET'
       };
       var headers = {
@@ -3075,7 +3075,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstances', function(
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return _.uniqBy(response.data, function(el) {
+          return _.map(response.data, function(el) {
             return new FilterType(el);
           });
         }
@@ -3114,7 +3114,7 @@ angular.module('AnalyticsAngularClient').provider('Scenarios', function() {
      */
     api.create = function(data) {
       var url = {
-        path: 'undefined/api/scenarios',
+        path: '/api/scenarios',
         method: 'POST'
       };
       var headers = {
@@ -3178,7 +3178,7 @@ angular.module('AnalyticsAngularClient').provider('Scenarios', function() {
      */
     api.index = function(data) {
       var url = {
-        path: 'undefined/api/scenarios',
+        path: '/api/scenarios',
         method: 'GET'
       };
       var headers = {
@@ -3200,7 +3200,7 @@ angular.module('AnalyticsAngularClient').provider('Scenarios', function() {
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return _.uniqBy(response.data, function(el) {
+          return _.map(response.data, function(el) {
             return new ScenarioType(el);
           });
         }
@@ -3226,7 +3226,7 @@ angular.module('AnalyticsAngularClient').provider('Scenarios', function() {
      */
     api.show = function(data) {
       var url = {
-        path: 'undefined/api/scenarios/' + data.id + '',
+        path: '/api/scenarios/' + data.id + '',
         method: 'GET'
       };
       var headers = {
@@ -3268,7 +3268,7 @@ angular.module('AnalyticsAngularClient').provider('Scenarios', function() {
      */
     api.update = function(data) {
       var url = {
-        path: 'undefined/api/scenarios/' + data.id + '',
+        path: '/api/scenarios/' + data.id + '',
         method: 'PATCH'
       };
       var headers = {
@@ -3324,7 +3324,7 @@ angular.module('AnalyticsAngularClient').provider('Scenarios', function() {
      */
     api.destroy = function(data) {
       var url = {
-        path: 'undefined/api/scenarios/' + data.id + '',
+        path: '/api/scenarios/' + data.id + '',
         method: 'DELETE'
       };
       var headers = {
@@ -3364,7 +3364,7 @@ angular.module('AnalyticsAngularClient').provider('Scenarios', function() {
  */
     api.forecast = function(data) {
       var url = {
-        path: 'undefined/api/scenarios/' + data.id + '/actions/forecast',
+        path: '/api/scenarios/' + data.id + '/actions/forecast',
         method: 'GET'
       };
       var headers = {
@@ -3419,7 +3419,7 @@ angular.module('AnalyticsAngularClient').provider('ScheduledReports', function()
      */
     api.create = function(data) {
       var url = {
-        path: 'undefined/api/scheduled_reports',
+        path: '/api/scheduled_reports',
         method: 'POST'
       };
       var headers = {
@@ -3482,7 +3482,7 @@ angular.module('AnalyticsAngularClient').provider('ScheduledReports', function()
      */
     api.index = function(data) {
       var url = {
-        path: 'undefined/api/scheduled_reports',
+        path: '/api/scheduled_reports',
         method: 'GET'
       };
       var headers = {
@@ -3500,7 +3500,7 @@ angular.module('AnalyticsAngularClient').provider('ScheduledReports', function()
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return _.uniqBy(response.data, function(el) {
+          return _.map(response.data, function(el) {
             return new ScheduledReportType(el);
           });
         }
@@ -3526,7 +3526,7 @@ angular.module('AnalyticsAngularClient').provider('ScheduledReports', function()
      */
     api.show = function(data) {
       var url = {
-        path: 'undefined/api/scheduled_reports/' + data.id + '',
+        path: '/api/scheduled_reports/' + data.id + '',
         method: 'GET'
       };
       var headers = {
@@ -3568,7 +3568,7 @@ angular.module('AnalyticsAngularClient').provider('ScheduledReports', function()
      */
     api.update = function(data) {
       var url = {
-        path: 'undefined/api/scheduled_reports/' + data.id + '',
+        path: '/api/scheduled_reports/' + data.id + '',
         method: 'PATCH'
       };
       var headers = {
@@ -3624,7 +3624,7 @@ angular.module('AnalyticsAngularClient').provider('ScheduledReports', function()
      */
     api.destroy = function(data) {
       var url = {
-        path: 'undefined/api/scheduled_reports/' + data.id + '',
+        path: '/api/scheduled_reports/' + data.id + '',
         method: 'DELETE'
       };
       var headers = {
@@ -3662,7 +3662,7 @@ angular.module('AnalyticsAngularClient').provider('ScheduledReports', function()
      */
     api.createDefaults = function(data) {
       var url = {
-        path: 'undefined/api/scheduled_reports/actions/create_defaults',
+        path: '/api/scheduled_reports/actions/create_defaults',
         method: 'POST'
       };
       var headers = {
@@ -3717,7 +3717,7 @@ angular.module('AnalyticsAngularClient').provider('TempInstancePrices', function
      */
     api.index = function(data) {
       var url = {
-        path: 'undefined/api/temp_instance_prices',
+        path: '/api/temp_instance_prices',
         method: 'GET'
       };
       var headers = {
@@ -3766,7 +3766,7 @@ angular.module('AnalyticsAngularClient').provider('UserSettings', function() {
      */
     api.show = function(data) {
       var url = {
-        path: 'undefined/api/user_settings',
+        path: '/api/user_settings',
         method: 'GET'
       };
       var headers = {
@@ -3808,7 +3808,7 @@ angular.module('AnalyticsAngularClient').provider('UserSettings', function() {
      */
     api.update = function(data) {
       var url = {
-        path: 'undefined/api/user_settings',
+        path: '/api/user_settings',
         method: 'PATCH'
       };
       var headers = {
@@ -3902,7 +3902,7 @@ angular.module('AnalyticsAngularClient').provider('Users', function() {
  */
     api.create = function(data) {
       var url = {
-        path: 'undefined/api/users',
+        path: '/api/users',
         method: 'POST'
       };
       var headers = {
@@ -3956,7 +3956,7 @@ angular.module('AnalyticsAngularClient').provider('Users', function() {
      */
     api.index = function(data) {
       var url = {
-        path: 'undefined/api/users',
+        path: '/api/users',
         method: 'GET'
       };
       var headers = {
@@ -3974,7 +3974,7 @@ angular.module('AnalyticsAngularClient').provider('Users', function() {
         params: params,
       }).then(function(response) {
         if (response.code === 200) {
-          return _.uniqBy(response.data, function(el) {
+          return _.map(response.data, function(el) {
             return new UserType(el);
           });
         }
@@ -4000,7 +4000,7 @@ angular.module('AnalyticsAngularClient').provider('Users', function() {
      */
     api.show = function(data) {
       var url = {
-        path: 'undefined/api/users/' + data.id + '',
+        path: '/api/users/' + data.id + '',
         method: 'GET'
       };
       var headers = {
@@ -4043,7 +4043,7 @@ angular.module('AnalyticsAngularClient').provider('Users', function() {
  */
     api.update = function(data) {
       var url = {
-        path: 'undefined/api/users/' + data.id + '',
+        path: '/api/users/' + data.id + '',
         method: 'PATCH'
       };
       var headers = {
@@ -4090,7 +4090,7 @@ angular.module('AnalyticsAngularClient').provider('Users', function() {
      */
     api.delete = function(data) {
       var url = {
-        path: 'undefined/api/users/' + data.id + '',
+        path: '/api/users/' + data.id + '',
         method: 'DELETE'
       };
       var headers = {
@@ -4131,7 +4131,7 @@ angular.module('AnalyticsAngularClient').provider('Users', function() {
  */
     api.invite = function(data) {
       var url = {
-        path: 'undefined/api/users/actions/invite',
+        path: '/api/users/actions/invite',
         method: 'POST'
       };
       var headers = {
@@ -4195,7 +4195,7 @@ angular.module('AnalyticsAngularClient').provider('UtilizationReport', function(
      */
     api.index = function(data) {
       var url = {
-        path: 'undefined/api/utilization_report',
+        path: '/api/utilization_report',
         method: 'GET'
       };
       var headers = {
@@ -4253,14 +4253,6 @@ angular.module('AnalyticsAngularClient').provider('AccountType', function() {
        * undefined
        */
       this.href = data['href'];
-      /**
-       * @ngdoc property
-       * @name AccountType.kind
-       * @type {String}
-       * @description
-       * undefined
-       */
-      this.kind = data['kind'];
       /**
        * @ngdoc property
        * @name AccountType.name
@@ -4399,7 +4391,7 @@ angular.module('AnalyticsAngularClient').provider('AccountType', function() {
        * The account's cloud accounts.
        */
       // Currently the existence of this type is assumed
-      this.cloudAccounts = _.uniqBy((data['cloud_accounts'] || []), function(element) {
+      this.cloudAccounts = _.map((data['cloud_accounts'] || []), function(element) {
         return new CloudAccountType(element);
       });
     }
@@ -4425,14 +4417,6 @@ angular.module('AnalyticsAngularClient').provider('AnalysisSnapshotType', functi
        * undefined
        */
       this.href = data['href'];
-      /**
-       * @ngdoc property
-       * @name AnalysisSnapshotType.kind
-       * @type {String}
-       * @description
-       * undefined
-       */
-      this.kind = data['kind'];
       /**
        * @ngdoc property
        * @name AnalysisSnapshotType.createdAt
@@ -4505,7 +4489,7 @@ angular.module('AnalyticsAngularClient').provider('AnalysisSnapshotType', functi
        * Filters used to create the snapshot
        */
       // Currently the existence of this type is assumed
-      this.filters = _.uniqBy((data['filters'] || []), function(element) {
+      this.filters = _.map((data['filters'] || []), function(element) {
         return new FilterType(element);
       });
       /**
@@ -4516,7 +4500,7 @@ angular.module('AnalyticsAngularClient').provider('AnalysisSnapshotType', functi
        * Used by the Cloud Analytics UI to store the state of the snapshot modules based on the state of the Analyze page modules.
        */
       // Currently the existence of this type is assumed
-      this.moduleStates = _.uniqBy((data['module_states'] || []), function(element) {
+      this.moduleStates = _.map((data['module_states'] || []), function(element) {
         return new ModuleStateType(element);
       });
       /**
@@ -4559,14 +4543,6 @@ angular.module('AnalyticsAngularClient').provider('BudgetAlertType', function() 
        * undefined
        */
       this.href = data['href'];
-      /**
-       * @ngdoc property
-       * @name BudgetAlertType.kind
-       * @type {String}
-       * @description
-       * undefined
-       */
-      this.kind = data['kind'];
       /**
        * @ngdoc property
        * @name BudgetAlertType.name
@@ -4624,7 +4600,7 @@ angular.module('AnalyticsAngularClient').provider('BudgetAlertType', function() 
        * Filters to use for the BudgetAlert.
        */
       // Currently the existence of this type is assumed
-      this.filters = _.uniqBy((data['filters'] || []), function(element) {
+      this.filters = _.map((data['filters'] || []), function(element) {
         return new FilterType(element);
       });
       /**
@@ -4650,14 +4626,6 @@ angular.module('AnalyticsAngularClient').provider('BudgetAlertType', function() 
 angular.module('AnalyticsAngularClient').provider('CloudAccountType', function() {
   this.$get = function() {
     function CloudAccountType(data) {
-      /**
-       * @ngdoc property
-       * @name CloudAccountType.kind
-       * @type {String}
-       * @description
-       * undefined
-       */
-      this.kind = data['kind'];
       /**
        * @ngdoc property
        * @name CloudAccountType.cloudId
@@ -4705,14 +4673,6 @@ angular.module('AnalyticsAngularClient').provider('CurrentUserType', function() 
        * undefined
        */
       this.id = data['id'];
-      /**
-       * @ngdoc property
-       * @name CurrentUserType.kind
-       * @type {String}
-       * @description
-       * undefined
-       */
-      this.kind = data['kind'];
       /**
        * @ngdoc property
        * @name CurrentUserType.firstName
@@ -4786,14 +4746,6 @@ angular.module('AnalyticsAngularClient').provider('FilterType', function() {
     function FilterType(data) {
       /**
        * @ngdoc property
-       * @name FilterType.kind
-       * @type {String}
-       * @description
-       * undefined
-       */
-      this.kind = data['kind'];
-      /**
-       * @ngdoc property
        * @name FilterType.type
        * @type {String}
        * @description
@@ -4831,14 +4783,6 @@ angular.module('AnalyticsAngularClient').provider('FilterType', function() {
 angular.module('AnalyticsAngularClient').provider('InstanceType', function() {
   this.$get = function(TagType) {
     function InstanceType(data) {
-      /**
-       * @ngdoc property
-       * @name InstanceType.kind
-       * @type {String}
-       * @description
-       * undefined
-       */
-      this.kind = data['kind'];
       /**
        * @ngdoc property
        * @name InstanceType.instanceKey
@@ -5048,7 +4992,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceType', function() {
        * undefined
        */
       // Currently the existence of this type is assumed
-      this.tags = _.uniqBy((data['tags'] || []), function(element) {
+      this.tags = _.map((data['tags'] || []), function(element) {
         return new TagType(element);
       });
       /**
@@ -5082,14 +5026,6 @@ angular.module('AnalyticsAngularClient').provider('InstanceType', function() {
 angular.module('AnalyticsAngularClient').provider('InstanceCombinationType', function() {
   this.$get = function(ScenarioType, PatternType, ReservedInstancePurchaseType) {
     function InstanceCombinationType(data) {
-      /**
-       * @ngdoc property
-       * @name InstanceCombinationType.kind
-       * @type {String}
-       * @description
-       * undefined
-       */
-      this.kind = data['kind'];
       /**
        * @ngdoc property
        * @name InstanceCombinationType.id
@@ -5187,7 +5123,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceCombinationType', fun
        * Patterns applied to the InstanceCombination, in the order that they are applied.
        */
       // Currently the existence of this type is assumed
-      this.patterns = _.uniqBy((data['patterns'] || []), function(element) {
+      this.patterns = _.map((data['patterns'] || []), function(element) {
         return new PatternType(element);
       });
       /**
@@ -5198,7 +5134,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceCombinationType', fun
        * Reserved Instance purchases applied to the instance combination.
        */
       // Currently the existence of this type is assumed
-      this.reservedInstancePurchases = _.uniqBy((data['reserved_instance_purchases'] || []), function(element) {
+      this.reservedInstancePurchases = _.map((data['reserved_instance_purchases'] || []), function(element) {
         return new ReservedInstancePurchaseType(element);
       });
       /**
@@ -5224,14 +5160,6 @@ angular.module('AnalyticsAngularClient').provider('InstanceCombinationType', fun
 angular.module('AnalyticsAngularClient').provider('InstanceUsagePeriodType', function() {
   this.$get = function() {
     function InstanceUsagePeriodType(data) {
-      /**
-       * @ngdoc property
-       * @name InstanceUsagePeriodType.kind
-       * @type {String}
-       * @description
-       * undefined
-       */
-      this.kind = data['kind'];
       /**
        * @ngdoc property
        * @name InstanceUsagePeriodType.instanceKey
@@ -5320,14 +5248,6 @@ angular.module('AnalyticsAngularClient').provider('InstanceUsagePeriodType', fun
 angular.module('AnalyticsAngularClient').provider('MetricsType', function() {
   this.$get = function() {
     function MetricsType(data) {
-      /**
-       * @ngdoc property
-       * @name MetricsType.kind
-       * @type {String}
-       * @description
-       * undefined
-       */
-      this.kind = data['kind'];
       /**
        * @ngdoc property
        * @name MetricsType.averageInstanceCount
@@ -5433,14 +5353,6 @@ angular.module('AnalyticsAngularClient').provider('MetricsResultType', function(
     function MetricsResultType(data) {
       /**
        * @ngdoc property
-       * @name MetricsResultType.kind
-       * @type {String}
-       * @description
-       * undefined
-       */
-      this.kind = data['kind'];
-      /**
-       * @ngdoc property
        * @name MetricsResultType.group
        * @type {Hash}
        * @description
@@ -5464,7 +5376,7 @@ angular.module('AnalyticsAngularClient').provider('MetricsResultType', function(
        * The nested metric results requested by the `group` parameter.
        */
       // Currently the existence of this type is assumed
-      this.breakdownMetricsResults = _.uniqBy((data['breakdown_metrics_results'] || []), function(element) {
+      this.breakdownMetricsResults = _.map((data['breakdown_metrics_results'] || []), function(element) {
         return new MetricsResultType(element);
       });
     }
@@ -5474,14 +5386,6 @@ angular.module('AnalyticsAngularClient').provider('MetricsResultType', function(
 angular.module('AnalyticsAngularClient').provider('ModuleStateType', function() {
   this.$get = function() {
     function ModuleStateType(data) {
-      /**
-       * @ngdoc property
-       * @name ModuleStateType.kind
-       * @type {String}
-       * @description
-       * undefined
-       */
-      this.kind = data['kind'];
       /**
        * @ngdoc property
        * @name ModuleStateType.type
@@ -5537,14 +5441,6 @@ angular.module('AnalyticsAngularClient').provider('PatternType', function() {
        * undefined
        */
       this.href = data['href'];
-      /**
-       * @ngdoc property
-       * @name PatternType.kind
-       * @type {String}
-       * @description
-       * undefined
-       */
-      this.kind = data['kind'];
       /**
        * @ngdoc property
        * @name PatternType.name
@@ -5631,7 +5527,7 @@ angular.module('AnalyticsAngularClient').provider('PatternType', function() {
        * Collection of Scenarios that use this pattern.
        */
       // Currently the existence of this type is assumed
-      this.scenarios = _.uniqBy((data['scenarios'] || []), function(element) {
+      this.scenarios = _.map((data['scenarios'] || []), function(element) {
         return new ScenarioType(element);
       });
     }
@@ -5641,14 +5537,6 @@ angular.module('AnalyticsAngularClient').provider('PatternType', function() {
 angular.module('AnalyticsAngularClient').provider('ReservedInstanceType', function() {
   this.$get = function() {
     function ReservedInstanceType(data) {
-      /**
-       * @ngdoc property
-       * @name ReservedInstanceType.kind
-       * @type {String}
-       * @description
-       * undefined
-       */
-      this.kind = data['kind'];
       /**
        * @ngdoc property
        * @name ReservedInstanceType.reservationUid
@@ -5843,14 +5731,6 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstancePurchaseType'
       this.href = data['href'];
       /**
        * @ngdoc property
-       * @name ReservedInstancePurchaseType.kind
-       * @type {String}
-       * @description
-       * undefined
-       */
-      this.kind = data['kind'];
-      /**
-       * @ngdoc property
        * @name ReservedInstancePurchaseType.offeringType
        * @type {String}
        * @description
@@ -5939,14 +5819,6 @@ angular.module('AnalyticsAngularClient').provider('ScenarioType', function() {
       this.href = data['href'];
       /**
        * @ngdoc property
-       * @name ScenarioType.kind
-       * @type {String}
-       * @description
-       * undefined
-       */
-      this.kind = data['kind'];
-      /**
-       * @ngdoc property
        * @name ScenarioType.name
        * @type {String}
        * @description
@@ -5977,7 +5849,7 @@ angular.module('AnalyticsAngularClient').provider('ScenarioType', function() {
        * Filters to use for the Scenario.
        */
       // Currently the existence of this type is assumed
-      this.filters = _.uniqBy((data['filters'] || []), function(element) {
+      this.filters = _.map((data['filters'] || []), function(element) {
         return new FilterType(element);
       });
       /**
@@ -5988,7 +5860,7 @@ angular.module('AnalyticsAngularClient').provider('ScenarioType', function() {
        * The `average_instance_count` and `total_cost` of the scenario for the last 12 months.
        */
       // Currently the existence of this type is assumed
-      this.historicMetricsResults = _.uniqBy((data['historic_metrics_results'] || []), function(element) {
+      this.historicMetricsResults = _.map((data['historic_metrics_results'] || []), function(element) {
         return new TimeSeriesMetricsResultType(element);
       });
       /**
@@ -6007,7 +5879,7 @@ angular.module('AnalyticsAngularClient').provider('ScenarioType', function() {
        * InstanceCombinations in the Scenario.
        */
       // Currently the existence of this type is assumed
-      this.instanceCombinations = _.uniqBy((data['instance_combinations'] || []), function(element) {
+      this.instanceCombinations = _.map((data['instance_combinations'] || []), function(element) {
         return new InstanceCombinationType(element);
       });
       /**
@@ -6051,14 +5923,6 @@ angular.module('AnalyticsAngularClient').provider('ScheduledReportType', functio
       this.href = data['href'];
       /**
        * @ngdoc property
-       * @name ScheduledReportType.kind
-       * @type {String}
-       * @description
-       * undefined
-       */
-      this.kind = data['kind'];
-      /**
-       * @ngdoc property
        * @name ScheduledReportType.name
        * @type {String}
        * @description
@@ -6100,7 +5964,7 @@ angular.module('AnalyticsAngularClient').provider('ScheduledReportType', functio
        * Filters to use for the ScheduledReport.
        */
       // Currently the existence of this type is assumed
-      this.filters = _.uniqBy((data['filters'] || []), function(element) {
+      this.filters = _.map((data['filters'] || []), function(element) {
         return new FilterType(element);
       });
       /**
@@ -6126,14 +5990,6 @@ angular.module('AnalyticsAngularClient').provider('ScheduledReportType', functio
 angular.module('AnalyticsAngularClient').provider('TagType', function() {
   this.$get = function() {
     function TagType(data) {
-      /**
-       * @ngdoc property
-       * @name TagType.kind
-       * @type {String}
-       * @description
-       * undefined
-       */
-      this.kind = data['kind'];
       /**
        * @ngdoc property
        * @name TagType.resourceType
@@ -6167,14 +6023,6 @@ angular.module('AnalyticsAngularClient').provider('TimeSeriesMetricsResultType',
     function TimeSeriesMetricsResultType(data) {
       /**
        * @ngdoc property
-       * @name TimeSeriesMetricsResultType.kind
-       * @type {String}
-       * @description
-       * undefined
-       */
-      this.kind = data['kind'];
-      /**
-       * @ngdoc property
        * @name TimeSeriesMetricsResultType.timestamp
        * @type {Date}
        * @description
@@ -6189,7 +6037,7 @@ angular.module('AnalyticsAngularClient').provider('TimeSeriesMetricsResultType',
        * undefined
        */
       // Currently the existence of this type is assumed
-      this.results = _.uniqBy((data['results'] || []), function(element) {
+      this.results = _.map((data['results'] || []), function(element) {
         return new MetricsResultType(element);
       });
     }
@@ -6217,14 +6065,6 @@ angular.module('AnalyticsAngularClient').provider('UserType', function() {
       this.href = data['href'];
       /**
        * @ngdoc property
-       * @name UserType.kind
-       * @type {String}
-       * @description
-       * undefined
-       */
-      this.kind = data['kind'];
-      /**
-       * @ngdoc property
        * @name UserType.email
        * @type {String}
        * @description
@@ -6239,7 +6079,7 @@ angular.module('AnalyticsAngularClient').provider('UserType', function() {
        * List of accounts that the user has access to.
        */
       // Currently the existence of this type is assumed
-      this.accounts = _.uniqBy((data['accounts'] || []), function(element) {
+      this.accounts = _.map((data['accounts'] || []), function(element) {
         return new UserAccountsType(element);
       });
       /**
@@ -6265,14 +6105,6 @@ angular.module('AnalyticsAngularClient').provider('UserType', function() {
 angular.module('AnalyticsAngularClient').provider('UserAccountsType', function() {
   this.$get = function(SetType) {
     function UserAccountsType(data) {
-      /**
-       * @ngdoc property
-       * @name UserAccountsType.kind
-       * @type {String}
-       * @description
-       * undefined
-       */
-      this.kind = data['kind'];
       /**
        * @ngdoc property
        * @name UserAccountsType.accountId
@@ -6398,14 +6230,6 @@ angular.module('AnalyticsAngularClient').provider('UserOnboardingStatusType', fu
     function UserOnboardingStatusType(data) {
       /**
        * @ngdoc property
-       * @name UserOnboardingStatusType.kind
-       * @type {String}
-       * @description
-       * undefined
-       */
-      this.kind = data['kind'];
-      /**
-       * @ngdoc property
        * @name UserOnboardingStatusType.status
        * @type {String}
        * @description
@@ -6443,14 +6267,6 @@ angular.module('AnalyticsAngularClient').provider('UserOnboardingStatusType', fu
 angular.module('AnalyticsAngularClient').provider('UserSettingType', function() {
   this.$get = function(SetType, ModuleStateType, FilterType) {
     function UserSettingType(data) {
-      /**
-       * @ngdoc property
-       * @name UserSettingType.kind
-       * @type {String}
-       * @description
-       * undefined
-       */
-      this.kind = data['kind'];
       /**
        * @ngdoc property
        * @name UserSettingType.mainMenuVisible
@@ -6514,7 +6330,7 @@ The key is the ID of the table (i.e. `instance_datatable`), the Set is the visib
        * These are the modules displayed on the Analyze Page.
        */
       // Currently the existence of this type is assumed
-      this.moduleStates = _.uniqBy((data['module_states'] || []), function(element) {
+      this.moduleStates = _.map((data['module_states'] || []), function(element) {
         return new ModuleStateType(element);
       });
       /**
@@ -6525,7 +6341,7 @@ The key is the ID of the table (i.e. `instance_datatable`), the Set is the visib
        * Filters the user has currently *applied* on the Analyze Page
        */
       // Currently the existence of this type is assumed
-      this.filters = _.uniqBy((data['filters'] || []), function(element) {
+      this.filters = _.map((data['filters'] || []), function(element) {
         return new FilterType(element);
       });
       /**
