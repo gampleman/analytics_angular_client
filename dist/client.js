@@ -1139,7 +1139,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceCombinations', functi
      */
     api.show = function(data) {
       var url = {
-        path: '/api/scenarios/' + data.scenario_id + '/instance_combinations/:id',
+        path: '/api/scenarios/' + data.scenario_id + '/instance_combinations/' + data.id + '',
         method: 'GET'
       };
       var headers = {
@@ -1181,7 +1181,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceCombinations', functi
      */
     api.update = function(data) {
       var url = {
-        path: '/api/scenarios/' + data.scenario_id + '/instance_combinations/:id',
+        path: '/api/scenarios/' + data.scenario_id + '/instance_combinations/' + data.id + '',
         method: 'PATCH'
       };
       var headers = {
@@ -1252,7 +1252,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceCombinations', functi
      */
     api.destroy = function(data) {
       var url = {
-        path: '/api/scenarios/' + data.scenario_id + '/instance_combinations/:id',
+        path: '/api/scenarios/' + data.scenario_id + '/instance_combinations/' + data.id + '',
         method: 'DELETE'
       };
       var headers = {
@@ -1290,7 +1290,7 @@ angular.module('AnalyticsAngularClient').provider('InstanceCombinations', functi
      */
     api.reservedInstancePrices = function(data) {
       var url = {
-        path: '/api/scenarios/' + data.scenario_id + '/instance_combinations/:id/actions/reserved_instance_prices',
+        path: '/api/scenarios/' + data.scenario_id + '/instance_combinations/' + data.id + '/actions/reserved_instance_prices',
         method: 'GET'
       };
       var headers = {
@@ -2490,7 +2490,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstancePurchases', f
      */
     api.create = function(data) {
       var url = {
-        path: '/api/scenarios/' + data.scenario_id + '/instance_combinations/:instance_combination_id/reserved_instance_purchases',
+        path: '/api/scenarios/' + data.scenario_id + '/instance_combinations/' + data.instance_combination_id + '/reserved_instance_purchases',
         method: 'POST'
       };
       var headers = {
@@ -2559,7 +2559,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstancePurchases', f
      */
     api.index = function(data) {
       var url = {
-        path: '/api/scenarios/' + data.scenario_id + '/instance_combinations/:instance_combination_id/reserved_instance_purchases',
+        path: '/api/scenarios/' + data.scenario_id + '/instance_combinations/' + data.instance_combination_id + '/reserved_instance_purchases',
         method: 'GET'
       };
       var headers = {
@@ -2603,7 +2603,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstancePurchases', f
      */
     api.show = function(data) {
       var url = {
-        path: '/api/scenarios/' + data.scenario_id + '/instance_combinations/:instance_combination_id/reserved_instance_purchases/:id',
+        path: '/api/scenarios/' + data.scenario_id + '/instance_combinations/' + data.instance_combination_id + '/reserved_instance_purchases/' + data.id + '',
         method: 'GET'
       };
       var headers = {
@@ -2645,7 +2645,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstancePurchases', f
      */
     api.update = function(data) {
       var url = {
-        path: '/api/scenarios/' + data.scenario_id + '/instance_combinations/:instance_combination_id/reserved_instance_purchases/:id',
+        path: '/api/scenarios/' + data.scenario_id + '/instance_combinations/' + data.instance_combination_id + '/reserved_instance_purchases/' + data.id + '',
         method: 'PATCH'
       };
       var headers = {
@@ -2704,7 +2704,7 @@ angular.module('AnalyticsAngularClient').provider('ReservedInstancePurchases', f
      */
     api.destroy = function(data) {
       var url = {
-        path: '/api/scenarios/' + data.scenario_id + '/instance_combinations/:instance_combination_id/reserved_instance_purchases/:id',
+        path: '/api/scenarios/' + data.scenario_id + '/instance_combinations/' + data.instance_combination_id + '/reserved_instance_purchases/' + data.id + '',
         method: 'DELETE'
       };
       var headers = {
