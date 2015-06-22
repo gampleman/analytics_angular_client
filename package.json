@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {},
   "devDependencies": {
+    "grunt-ng-annotate": "^0.10.0",
     "load-grunt-tasks": "~3",
     "grunt": "~0.4",
     "grunt-contrib-concat": "~0.5",

@@ -7,8 +7,8 @@ module.exports = function(grunt) {
       },
       dist: {
         files: [{
-          src: 'lib/**',
-          dest: 'dist/client.js'
+          src: "lib/**",
+          dest: "dist/client.js"
         }]
       }
     },
@@ -16,15 +16,26 @@ module.exports = function(grunt) {
       dist: {
         options: {
           compress: true,
-          mangle: false,
+          mangle: true,
           sourceMap: true
         },
         files: [{
-          src: 'dist/client.js',
-          dest: 'dist/client.min.js'
+          src: "dist/client.js",
+          dest: "dist/client.min.js"
+        }]
+      }
+    },
+    ngAnnotate: {
+      dist: {
+        options: {
+          singleQuotes: true
+        },
+        files: [{
+          src: "dist/client.js",
+          dest: "dist/client.js"
         }]
       }
     }
   });
-  grunt.registerTask('build', ['concat:dist', 'uglify:dist']);
+  grunt.registerTask('build', ["concat:dist", "ngAnnotate:dist", "uglify:dist"]);
 }
